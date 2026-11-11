@@ -1,0 +1,100 @@
+@import "tailwindcss";
+
+/* Medical theme: emerald/teal primary on clean white (Maitso sy Fotsy).
+   If you run `npx shadcn@latest init`, keep these overrides of its :root tokens. */
+:root {
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.21 0.03 160);
+  --primary: oklch(0.596 0.145 163);        /* emerald-600 */
+  --primary-foreground: oklch(0.98 0.02 166);
+  --ring: oklch(0.696 0.17 162);            /* emerald-500 */
+  --input: oklch(0.92 0.02 165);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+}
+
+body { background: var(--background); color: var(--foreground); }
+
+/* ───────── Thème « Manga sy Fotsy » ─────────
+   Le thème par défaut (maitso/emerald) est celui de Tailwind. Pour le thème bleu, on
+   redéfinit la palette emerald/teal utilisée partout dans l'app : aucune classe à changer.
+   Ces règles ne sont dans aucun @layer, elles gagnent donc sur celles de Tailwind.
+   Le attribut data-theme est posé sur <html> par app/layout.tsx (lu depuis le cookie). */
+:root[data-theme="blue"] {
+  --primary: oklch(0.424 0.199 265.638);        /* blue-800 */
+  --primary-foreground: oklch(0.97 0.014 254.604);
+  --ring: oklch(0.488 0.243 264.376);           /* blue-700 */
+  --input: oklch(0.92 0.025 255);
+
+  --color-emerald-50: oklch(0.97 0.014 254.604);
+  --color-emerald-100: oklch(0.932 0.032 255.585);
+  --color-emerald-200: oklch(0.882 0.059 254.128);
+  --color-emerald-300: oklch(0.809 0.105 251.813);
+  --color-emerald-400: oklch(0.707 0.165 254.624);
+  --color-emerald-500: oklch(0.488 0.243 264.376);
+  --color-emerald-600: oklch(0.424 0.199 265.638);
+  --color-emerald-700: oklch(0.379 0.146 265.522);
+  --color-emerald-800: oklch(0.35 0.12 266);
+  --color-emerald-900: oklch(0.282 0.091 267.935);
+  --color-emerald-950: oklch(0.23 0.07 268);
+
+  /* teal (accents secondaires) -> bleu foncé */
+  --color-teal-100: oklch(0.932 0.032 255.585);
+  --color-teal-500: oklch(0.488 0.243 264.376);
+  --color-teal-800: oklch(0.379 0.146 265.522);
+}
+
+/* ───────── Thème « Gris foncé sy Fotsy » ───────── */
+:root[data-theme="gray"] {
+  --primary: oklch(0.4 0.032 258);
+  --primary-foreground: oklch(0.985 0.002 247.839);
+  --ring: oklch(0.551 0.027 264.364);
+  --input: oklch(0.928 0.006 264.531);
+
+  --color-emerald-50: oklch(0.985 0.002 247.839);
+  --color-emerald-100: oklch(0.967 0.003 264.542);
+  --color-emerald-200: oklch(0.928 0.006 264.531);
+  --color-emerald-300: oklch(0.872 0.01 258.338);
+  --color-emerald-400: oklch(0.707 0.022 261.325);
+  --color-emerald-500: oklch(0.551 0.027 264.364);
+  --color-emerald-600: oklch(0.4 0.032 258);
+  --color-emerald-700: oklch(0.3 0.033 257);
+  --color-emerald-800: oklch(0.34 0.033 258);
+  --color-emerald-900: oklch(0.25 0.03 258);
+  --color-emerald-950: oklch(0.21 0.034 264.665);
+
+  --color-teal-100: oklch(0.967 0.003 264.542);
+  --color-teal-500: oklch(0.45 0.03 258);
+  --color-teal-800: oklch(0.34 0.033 258);
+}
+
+/* ───────── Thème « Mena maizina sy Fotsy » (rouge foncé) ───────── */
+:root[data-theme="red"] {
+  --primary: oklch(0.505 0.213 27.518);
+  --primary-foreground: oklch(0.971 0.013 17.38);
+  --ring: oklch(0.637 0.237 25.331);
+  --input: oklch(0.936 0.032 17.717);
+
+  --color-emerald-50: oklch(0.971 0.013 17.38);
+  --color-emerald-100: oklch(0.936 0.032 17.717);
+  --color-emerald-200: oklch(0.885 0.062 18.334);
+  --color-emerald-300: oklch(0.808 0.114 19.571);
+  --color-emerald-400: oklch(0.704 0.191 22.216);
+  --color-emerald-500: oklch(0.637 0.237 25.331);
+  --color-emerald-600: oklch(0.505 0.213 27.518);
+  --color-emerald-700: oklch(0.444 0.177 26.899);
+  --color-emerald-800: oklch(0.396 0.141 25.723);
+  --color-emerald-900: oklch(0.31 0.11 26);
+  --color-emerald-950: oklch(0.258 0.092 26.042);
+
+  --color-teal-100: oklch(0.936 0.032 17.717);
+  --color-teal-500: oklch(0.505 0.213 27.518);
+  --color-teal-800: oklch(0.396 0.141 25.723);
+}

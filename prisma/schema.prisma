@@ -1,0 +1,130 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ───────── ENUMS ─────────
+enum Role {
+  ADMIN
+  DOCTOR
+  NURSE
+  RECEPTIONIST
+}
+
+enum RoomType {
+  VIP
+  STANDARD
+  ICU
+}
+
+enum BedStatus {
+  AVAILABLE
+  OCCUPIED
+  MAINTENANCE
+}
+
+enum PatientStatus {
+  ADMITTED
+  DISCHARGED
+  OUTPATIENT
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
+}
+
+// ───────── MODELS ─────────
+/// Personnel (staff). Authenticates through NextAuth.
+model User {
+  id         String   @id @default(cuid())
+  name       String
+  email      String   @unique
+  password   String // bcrypt hash, never plain text
+  role       Role     @default(RECEPTIONIST)
+  department String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([role])
+  @@map("users")
+}
+
+/// Service hospitalier (Pédiatrie, Cardiologie, ...). Regroupe les chambres STANDARD.
+model Service {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  chambres Chambre[]
+
+  @@map("services")
+}
+
+model Chambre {
+  id        String   @id @default(cuid())
+  number    String   @unique
+  floor     Int
+  type      RoomType @default(STANDARD)
+  /// Null pour les chambres VIP et ICU (hors services). Garanti par un CHECK SQL dans la migration.
+  serviceId String?
+  createdAt DateTime @default(now())
+
+  service Service? @relation(fields: [serviceId], references: [id], onDelete: SetNull)
+  lits    Lit[]
+
+  @@index([floor])
+  @@index([type])
+  @@index([serviceId])
+  @@map("chambres")
+}
+
+model Lit {
+  id        String    @id @default(cuid())
+  bedNumber String
+  chambreId String
+  status    BedStatus @default(AVAILABLE)
+  createdAt DateTime  @default(now())
+
+  chambre Chambre   @relation(fields: [chambreId], references: [id], onDelete: Cascade)
+  patient Patient? // one-to-one: a bed holds at most one patient
+
+  @@unique([chambreId, bedNumber])
+  @@index([status])
+  @@index([chambreId, status])
+  @@map("lits")
+}
+
+model Patient {
+  id               String        @id @default(cuid())
+  firstName        String
+  lastName         String
+  dob              DateTime      @db.Date
+  gender           Gender
+  phone            String?
+  emergencyContact String?
+  medicalHistory   String?       @db.Text
+  status           PatientStatus @default(OUTPATIENT)
+  /// Date d'entrée (admission). Null pour un patient externe.
+  admittedAt       DateTime?     @db.Date
+  /// Date de sortie. Renseignée seulement pour un patient DISCHARGED.
+  dischargedAt     DateTime?     @db.Date
+  litId            String?       @unique // @unique enforces one patient per bed at DB level
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+
+  lit Lit? @relation(fields: [litId], references: [id], onDelete: SetNull)
+
+  @@index([status])
+  @@index([lastName, firstName])
+  @@index([createdAt])
+  @@index([admittedAt])
+  @@map("patients")
+}
