@@ -4,7 +4,7 @@ import bcrypt from "bcryptjs";
 const prisma = new PrismaClient();
 
 async function main() {
-  const password = await bcrypt.hash("ChangeMe123!", 12);
+  const password = await bcrypt.hash("password123", 12);
 
   // ─── Personnel (Users) ───
   const staff = [
@@ -189,7 +189,7 @@ async function main() {
   console.log(`   - ${services.length} services`);
   console.log(`   - ${rooms.length} chambres (${rooms.filter((r) => r.service).length} réparties en services, VIP/ICU hors service)`);
   console.log(`   - ${samplePatients.length} patients d'exemple`);
-  console.log("   Mot de passe par défaut : ChangeMe123!");
+  console.log("   Mot de passe par défaut : password123");
 }
 
 main()
