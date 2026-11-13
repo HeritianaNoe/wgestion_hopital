@@ -14,7 +14,7 @@ export type StaffFormState = {
 };
 
 export async function createStaff(_prev: StaffFormState, formData: FormData): Promise<StaffFormState> {
-  await requireRole(["ADMIN"]);
+  await requireRole(["ADMIN", "DIRECTOR"]);
 
   const parsed = staffSchema.safeParse(Object.fromEntries(formData));
   if (!parsed.success) {
@@ -42,7 +42,7 @@ export async function createStaff(_prev: StaffFormState, formData: FormData): Pr
 }
 
 export async function updateStaff(id: string, _prev: StaffFormState, formData: FormData): Promise<StaffFormState> {
-  await requireRole(["ADMIN"]);
+  await requireRole(["ADMIN", "DIRECTOR"]);
 
   const parsed = staffSchema.safeParse(Object.fromEntries(formData));
   if (!parsed.success) {
@@ -70,8 +70,8 @@ export async function updateStaff(id: string, _prev: StaffFormState, formData: F
 }
 
 export async function deleteStaff(id: string) {
-  await requireRole(["ADMIN"]);
-  const session = await requireRole(["ADMIN"]);
+  await requireRole(["ADMIN", "DIRECTOR"]);
+  const session = await requireRole(["ADMIN", "DIRECTOR"]);
   if (session.user.id === id) {
     throw new Error("Vous ne pouvez pas supprimer votre propre compte.");
   }

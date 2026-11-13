@@ -1,6 +1,10 @@
 import { cookies } from "next/headers";
+import { auth } from "@/auth";
 import { setThemeAction } from "@/lib/actions/settings";
 import { DEFAULT_THEME, THEMES, THEME_COOKIE, isTheme, type ThemeKey } from "@/lib/theme";
+import { canManageAccess, type AppRole } from "@/lib/rbac";
+import { loadPermissionOverrides } from "@/lib/permissions";
+import { AccessMatrix } from "./access-matrix";
 
 export const dynamic = "force-dynamic";
 
@@ -13,14 +17,21 @@ const SWATCH: Record<ThemeKey, { sidebar: string; primary: string; soft: string 
 };
 
 export default async function ParametresPage() {
+  const session = await auth();
+  const role = session?.user?.role as AppRole | undefined;
+  const canEditAccess = canManageAccess(role);
+
   const saved = (await cookies()).get(THEME_COOKIE)?.value;
   const current: ThemeKey = isTheme(saved) ? saved : DEFAULT_THEME;
 
+  const overridesMap = await loadPermissionOverrides();
+  const overrides: Record<string, boolean> = Object.fromEntries(overridesMap);
+
   return (
-    <div className="mx-auto max-w-3xl space-y-6">
+    <div className="mx-auto max-w-5xl space-y-6">
       <div>
         <h1 className="text-2xl font-semibold text-slate-900">Paramètres</h1>
-        <p className="text-sm text-slate-500">Personnalisez l&apos;apparence de l&apos;application.</p>
+        <p className="text-sm text-slate-500">Personnalisez l&apos;apparence et les accès du personnel.</p>
       </div>
 
       <section className="rounded-xl border border-emerald-100 bg-white">
@@ -40,7 +51,6 @@ export default async function ParametresPage() {
                   active ? "border-emerald-600 bg-emerald-50" : "border-slate-200 hover:border-emerald-300"
                 }`}
               >
-                {/* mini aperçu : sidebar + contenu */}
                 <div className="flex h-24 overflow-hidden rounded-lg border border-slate-200 bg-white">
                   <div className="w-1/4" style={{ background: sw.sidebar }} />
                   <div className="flex-1 space-y-2 p-2.5">
@@ -66,7 +76,11 @@ export default async function ParametresPage() {
         </form>
       </section>
 
-      <p className="text-xs text-slate-500">Le choix est enregistré sur cet appareil (cookie) et appliqué à toutes les pages.</p>
+      <p className="text-xs text-slate-500">
+        Le thème est enregistré sur cet appareil (cookie) et appliqué à toutes les pages.
+      </p>
+
+      <AccessMatrix overrides={overrides} canEdit={canEditAccess} />
     </div>
   );
 }

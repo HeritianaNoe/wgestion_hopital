@@ -47,6 +47,7 @@ export function StaffForm({ action, defaultValues, isEdit }: Props) {
           <select id="role" name="role" required defaultValue={defaultValues?.role ?? ""} className={selectClass}>
             <option value="" disabled>Choisir…</option>
             <option value="ADMIN">Administrateur</option>
+            <option value="DIRECTOR">Directeur</option>
             <option value="DOCTOR">Médecin</option>
             <option value="NURSE">Infirmier(e)</option>
             <option value="RECEPTIONIST">Réceptionniste</option>

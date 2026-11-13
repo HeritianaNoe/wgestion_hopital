@@ -9,7 +9,7 @@ export const dynamic = "force-dynamic";
 export async function GET(_req: Request, { params }: { params: Promise<{ id: string }> }) {
   const session = await auth();
   if (!session?.user) return new Response("Unauthorized", { status: 401 });
-  if (session.user.role !== "ADMIN") return new Response("Forbidden", { status: 403 }); // même règle que /staff
+  if (session.user.role !== "ADMIN" && session.user.role !== "DIRECTOR") return new Response("Forbidden", { status: 403 });
 
   const { id } = await params;
   const u = await prisma.user.findUnique({

@@ -5,7 +5,7 @@ const emptyToUndefined = (v: unknown) => (typeof v === "string" && v.trim() === 
 export const staffSchema = z.object({
   name: z.string().trim().min(2, "Nom requis"),
   email: z.string().trim().email("Email invalide"),
-  role: z.enum(["ADMIN", "DOCTOR", "NURSE", "RECEPTIONIST"], { message: "Rôle requis" }),
+  role: z.enum(["ADMIN", "DIRECTOR", "DOCTOR", "NURSE", "RECEPTIONIST"], { message: "Rôle requis" }),
   department: z.preprocess(emptyToUndefined, z.string().trim().optional()),
   password: z.preprocess(
     emptyToUndefined,

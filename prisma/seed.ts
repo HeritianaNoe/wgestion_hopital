@@ -9,6 +9,7 @@ async function main() {
   // ─── Personnel (Users) ───
   const staff = [
     { name: "Admin Général", email: "admin@hopital.mg", role: "ADMIN" as const, department: "Direction" },
+    { name: "Directeur Hôpital", email: "directeur@hopital.mg", role: "DIRECTOR" as const, department: "Direction" },
     { name: "Dr. Andrianina Rakoto", email: "doctor@hopital.mg", role: "DOCTOR" as const, department: "Cardiologie" },
     { name: "Dr. Fara Rasoanaivo", email: "fara.doctor@hopital.mg", role: "DOCTOR" as const, department: "Pédiatrie" },
     { name: "Dr. Jean Randriamampionona", email: "jean.doctor@hopital.mg", role: "DOCTOR" as const, department: "Chirurgie" },

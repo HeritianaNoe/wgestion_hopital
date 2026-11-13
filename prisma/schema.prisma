@@ -10,6 +10,7 @@ datasource db {
 // ───────── ENUMS ─────────
 enum Role {
   ADMIN
+  DIRECTOR
   DOCTOR
   NURSE
   RECEPTIONIST
@@ -53,6 +54,20 @@ model User {
 
   @@index([role])
   @@map("users")
+}
+
+/// Matrice d'accès par rôle (modules / ressources). Modifiable uniquement par ADMIN et DIRECTOR.
+model RolePermission {
+  id        String   @id @default(cuid())
+  role      Role
+  resource  String   // ex: "patients", "staff", "services", "chambres", "lits", "parametres"
+  canAccess Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([role, resource])
+  @@index([role])
+  @@map("role_permissions")
 }
 
 /// Service hospitalier (Pédiatrie, Cardiologie, ...). Regroupe les chambres STANDARD.

@@ -225,6 +225,26 @@ export function IconSettings(p: IconProps) {
   );
 }
 
+
+export function IconMenu(p: IconProps) {
+  return (
+    <svg {...base(p)}>
+      <path d="M4 6h16" />
+      <path d="M4 12h16" />
+      <path d="M4 18h16" />
+    </svg>
+  );
+}
+
+export function IconClose(p: IconProps) {
+  return (
+    <svg {...base(p)}>
+      <path d="M18 6 6 18" />
+      <path d="m6 6 12 12" />
+    </svg>
+  );
+}
+
 export const NAV_ICONS = {
   dashboard: IconDashboard,
   patients: IconPatients,
